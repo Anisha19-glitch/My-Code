@@ -1,0 +1,79 @@
+//Write a program to create a binary tree if inorder and preorder or inorder and postorder
+any two traversals are given.
+class BinaryTree {
+    class Node {
+        int data;
+        Node left, right;
+        Node(int item) {
+            data = item;
+            left = right = null;
+        }
+    }
+
+    int preIndex = 0;
+    int postIndex;
+
+    // Build tree from Inorder & Preorder
+    Node buildTreeFromPreIn(int inorder[], int preorder[], int inStart, int inEnd) {
+        if (inStart > inEnd) return null;
+
+        Node node = new Node(preorder[preIndex++]);
+
+        if (inStart == inEnd) return node;
+
+        int inIndex = search(inorder, inStart, inEnd, node.data);
+
+        node.left = buildTreeFromPreIn(inorder, preorder, inStart, inIndex - 1);
+        node.right = buildTreeFromPreIn(inorder, preorder, inIndex + 1, inEnd);
+        return node;
+    }
+
+    // Build tree from Inorder & Postorder
+    Node buildTreeFromPostIn(int inorder[], int postorder[], int inStart, int inEnd) {
+        if (inStart > inEnd) return null;
+
+        Node node = new Node(postorder[postIndex--]);
+
+        if (inStart == inEnd) return node;
+
+        int inIndex = search(inorder, inStart, inEnd, node.data);
+
+        node.right = buildTreeFromPostIn(inorder, postorder, inIndex + 1, inEnd);
+        node.left = buildTreeFromPostIn(inorder, postorder, inStart, inIndex - 1);
+        return node;
+    }
+
+    int search(int arr[], int start, int end, int value) {
+        for (int i = start; i <= end; i++)
+            if (arr[i] == value)
+                return i;
+        return -1;
+    }
+
+    void inorderTraversal(Node root) {
+        if (root != null) {
+            inorderTraversal(root.left);
+            System.out.print(root.data + " ");
+            inorderTraversal(root.right);
+        }
+    }
+
+    public static void main(String args[]) {
+        BinaryTree tree = new BinaryTree();
+
+        int inorder[] = {4, 2, 5, 1, 6, 3, 7};
+        int preorder[] = {1, 2, 4, 5, 3, 6, 7};
+        int postorder[] = {4, 5, 2, 6, 7, 3, 1};
+
+        System.out.println("Tree from Inorder & Preorder:");
+        tree.preIndex = 0;
+        Node root1 = tree.buildTreeFromPreIn(inorder, preorder, 0, inorder.length - 1);
+        tree.inorderTraversal(root1);
+        System.out.println();
+
+        System.out.println("Tree from Inorder & Postorder:");
+        tree.postIndex = postorder.length - 1;
+        Node root2 = tree.buildTreeFromPostIn(inorder, postorder, 0, inorder.length - 1);
+        tree.inorderTraversal(root2);
+    }
+}
