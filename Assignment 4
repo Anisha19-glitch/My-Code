@@ -1,0 +1,82 @@
+//Create an inorder threaded binary tree and perform its traversals.
+class ThreadedBinaryTree {
+    class Node {
+        int data;
+        Node left, right;
+        boolean rightThread; // True if right pointer is a thread
+
+        public Node(int data) {
+            this.data = data;
+            left = right = null;
+            rightThread = false;
+        }
+    }
+
+    Node root;
+
+    // Insert a node into Threaded Binary Tree
+    void insert(int data) {
+        Node newNode = new Node(data);
+        if (root == null) {
+            root = newNode;
+            return;
+        }
+
+        Node parent = null, current = root;
+        while (current != null) {
+            parent = current;
+            if (data < current.data) {
+                if (current.left == null) {
+                    current.left = newNode;
+                    newNode.right = current; // Threaded link to successor
+                    newNode.rightThread = true;
+                    return;
+                }
+                current = current.left;
+            } else {
+                if (!current.rightThread) {
+                    current = current.right;
+                } else {
+                    newNode.right = current.right;
+                    newNode.rightThread = true;
+                    current.right = newNode;
+                    current.rightThread = false;
+                    return;
+                }
+            }
+        }
+    }
+
+    // Inorder traversal using threading
+    void inorderTraversal() {
+        Node current = leftmost(root);
+        while (current != null) {
+            System.out.print(current.data + " ");
+            if (current.rightThread)
+                current = current.right;
+            else
+                current = leftmost(current.right);
+        }
+        System.out.println();
+    }
+
+    Node leftmost(Node node) {
+        while (node != null && node.left != null)
+            node = node.left;
+        return node;
+    }
+
+    public static void main(String[] args) {
+        ThreadedBinaryTree tree = new ThreadedBinaryTree();
+        tree.insert(50);
+        tree.insert(30);
+        tree.insert(70);
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(60);
+        tree.insert(80);
+
+        System.out.println("Inorder Traversal of Threaded Binary Tree:");
+        tree.inorderTraversal();
+    }
+}
