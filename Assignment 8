@@ -1,0 +1,181 @@
+# Implement hash table ADT and handle the collision using linear probing and chaining (with or without replacement). Perform operations on it.
+#Version 1: Linear Probing (Without Replacement)
+class LinearProbingHashTable {
+    private final int SIZE = 10;
+    private String[] table;
+
+    public LinearProbingHashTable() {
+        table = new String[SIZE];
+    }
+
+    private int hash(String key) {
+        return key.hashCode() % SIZE < 0 ? (key.hashCode() % SIZE + SIZE) : key.hashCode() % SIZE;
+    }
+
+    public void insert(String key) {
+        int index = hash(key);
+        int start = index;
+        while (table[index] != null) {
+            index = (index + 1) % SIZE;
+            if (index == start) {
+                System.out.println("Hash Table is full!");
+                return;
+            }
+        }
+        table[index] = key;
+        System.out.println("Inserted: " + key);
+    }
+
+    public void delete(String key) {
+        int index = hash(key);
+        int start = index;
+        while (table[index] != null) {
+            if (table[index].equals(key)) {
+                table[index] = null;
+                System.out.println("Deleted: " + key);
+                return;
+            }
+            index = (index + 1) % SIZE;
+            if (index == start) break;
+        }
+        System.out.println("Key not found.");
+    }
+
+    public void search(String key) {
+        int index = hash(key);
+        int start = index;
+        while (table[index] != null) {
+            if (table[index].equals(key)) {
+                System.out.println("Found at index: " + index);
+                return;
+            }
+            index = (index + 1) % SIZE;
+            if (index == start) break;
+        }
+        System.out.println("Key not found.");
+    }
+
+    public void display() {
+        System.out.println("Hash Table:");
+        for (int i = 0; i < SIZE; i++) {
+            System.out.println(i + " → " + table[i]);
+        }
+    }
+}
+#Version 2: Chaining (Separate Chaining with LinkedList)
+import java.util.*;
+
+class ChainingHashTable {
+    private final int SIZE = 10;
+    private LinkedList<String>[] table;
+
+    public ChainingHashTable() {
+        table = new LinkedList[SIZE];
+        for (int i = 0; i < SIZE; i++)
+            table[i] = new LinkedList<>();
+    }
+
+    private int hash(String key) {
+        return key.hashCode() % SIZE < 0 ? (key.hashCode() % SIZE + SIZE) : key.hashCode() % SIZE;
+    }
+
+    public void insert(String key) {
+        int index = hash(key);
+        if (!table[index].contains(key)) {
+            table[index].add(key);
+            System.out.println("Inserted: " + key);
+        } else {
+            System.out.println("Key already exists.");
+        }
+    }
+
+    public void delete(String key) {
+        int index = hash(key);
+        if (table[index].remove(key)) {
+            System.out.println("Deleted: " + key);
+        } else {
+            System.out.println("Key not found.");
+        }
+    }
+
+    public void search(String key) {
+        int index = hash(key);
+        if (table[index].contains(key)) {
+            System.out.println("Found in chain at index: " + index);
+        } else {
+            System.out.println("Key not found.");
+        }
+    }
+
+    public void display() {
+        System.out.println("Hash Table:");
+        for (int i = 0; i < SIZE; i++) {
+            System.out.print(i + " → ");
+            for (String key : table[i]) {
+                System.out.print(key + " → ");
+            }
+            System.out.println("null");
+        }
+    }
+}
+# Driver Code to Test Both Versions
+public class HashTableDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        LinearProbingHashTable linearHash = new LinearProbingHashTable();
+        ChainingHashTable chainingHash = new ChainingHashTable();
+
+        int choice, method;
+        String key;
+
+        do {
+            System.out.println("\nHash Table ADT");
+            System.out.println("1. Insert");
+            System.out.println("2. Delete");
+            System.out.println("3. Search");
+            System.out.println("4. Display");
+            System.out.println("5. Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            if (choice == 5) break;
+
+            System.out.println("Choose method: 1. Linear Probing  2. Chaining");
+            method = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter key to insert: ");
+                    key = sc.nextLine();
+                    if (method == 1) linearHash.insert(key);
+                    else chainingHash.insert(key);
+                    break;
+                case 2:
+                    System.out.print("Enter key to delete: ");
+                    key = sc.nextLine();
+                    if (method == 1) linearHash.delete(key);
+                    else chainingHash.delete(key);
+                    break;
+                case 3:
+                    System.out.print("Enter key to search: ");
+                    key = sc.nextLine();
+                    if (method == 1) linearHash.search(key);
+                    else chainingHash.search(key);
+                    break;
+                case 4:
+                    if (method == 1) linearHash.display();
+                    else chainingHash.display();
+                    break;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        } while (true);
+
+        sc.close();
+        System.out.println("Program Ended.");
+    }
+}
+
