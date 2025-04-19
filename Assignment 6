@@ -1,0 +1,121 @@
+#Write a modular program to implement primitive operations on Min/Max Heap.
+import java.util.*;
+
+class MinHeap {
+    private PriorityQueue<Integer> heap;
+
+    public MinHeap() {
+        heap = new PriorityQueue<>();
+    }
+
+    public void insert(int value) {
+        heap.add(value);
+        System.out.println("Inserted into MinHeap: " + value);
+    }
+
+    public void delete() {
+        if (!heap.isEmpty()) {
+            int removed = heap.poll();
+            System.out.println("Deleted from MinHeap: " + removed);
+        } else {
+            System.out.println("MinHeap is empty.");
+        }
+    }
+
+    public void peek() {
+        if (!heap.isEmpty()) {
+            System.out.println("MinHeap Root: " + heap.peek());
+        } else {
+            System.out.println("MinHeap is empty.");
+        }
+    }
+
+    public void display() {
+        System.out.println("MinHeap Elements: " + heap);
+    }
+}
+
+class MaxHeap {
+    private PriorityQueue<Integer> heap;
+
+    public MaxHeap() {
+        heap = new PriorityQueue<>(Collections.reverseOrder());
+    }
+
+    public void insert(int value) {
+        heap.add(value);
+        System.out.println("Inserted into MaxHeap: " + value);
+    }
+
+    public void delete() {
+        if (!heap.isEmpty()) {
+            int removed = heap.poll();
+            System.out.println("Deleted from MaxHeap: " + removed);
+        } else {
+            System.out.println("MaxHeap is empty.");
+        }
+    }
+
+    public void peek() {
+        if (!heap.isEmpty()) {
+            System.out.println("MaxHeap Root: " + heap.peek());
+        } else {
+            System.out.println("MaxHeap is empty.");
+        }
+    }
+
+    public void display() {
+        System.out.println("MaxHeap Elements: " + heap);
+    }
+}
+
+public class HeapOperations {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        MinHeap minHeap = new MinHeap();
+        MaxHeap maxHeap = new MaxHeap();
+
+        int choice, value;
+        do {
+            System.out.println("\nChoose Heap Type:");
+            System.out.println("1. Min Heap");
+            System.out.println("2. Max Heap");
+            System.out.println("3. Exit");
+            int heapType = sc.nextInt();
+            if (heapType == 3) break;
+            System.out.println("Choose Operation:");
+            System.out.println("1. Insert");
+            System.out.println("2. Delete Root");
+            System.out.println("3. Peek Root");
+            System.out.println("4. Display Heap");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter value: ");
+                    value = sc.nextInt();
+                    if (heapType == 1) minHeap.insert(value);
+                    else maxHeap.insert(value);
+                    break;
+                case 2:
+                    if (heapType == 1) minHeap.delete();
+                    else maxHeap.delete();
+                    break;
+                case 3:
+                    if (heapType == 1) minHeap.peek();
+                    else maxHeap.peek();
+                    break;
+                case 4:
+                    if (heapType == 1) minHeap.display();
+                    else maxHeap.display();
+                    break;
+                default:
+                    System.out.println("Invalid Operation.");
+            }
+        } while (true);
+
+        System.out.println("Program exited.");
+        sc.close();
+    }
+}
