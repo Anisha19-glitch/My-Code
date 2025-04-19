@@ -1,0 +1,137 @@
+#Write a program to implement Symbol Table as an ADT.
+import java.util.*;
+
+class Symbol {
+    String name;
+    String type;
+    int scope;
+
+    Symbol(String name, String type, int scope) {
+        this.name = name;
+        this.type = type;
+        this.scope = scope;
+    }
+
+    public String toString() {
+        return "Name: " + name + ", Type: " + type + ", Scope: " + scope;
+    }
+}
+
+class SymbolTableADT {
+    private HashMap<String, Symbol> table;
+
+    public SymbolTableADT() {
+        table = new HashMap<>();
+    }
+
+    public void insert(String name, String type, int scope) {
+        if (table.containsKey(name)) {
+            System.out.println("Symbol already exists!");
+        } else {
+            Symbol symbol = new Symbol(name, type, scope);
+            table.put(name, symbol);
+            System.out.println("Inserted: " + name);
+        }
+    }
+
+    public void delete(String name) {
+        if (table.containsKey(name)) {
+            table.remove(name);
+            System.out.println("Deleted: " + name);
+        } else {
+            System.out.println("Symbol not found!");
+        }
+    }
+
+    public void search(String name) {
+        Symbol symbol = table.get(name);
+        if (symbol != null) {
+            System.out.println("Found: " + symbol);
+        } else {
+            System.out.println("Symbol not found!");
+        }
+    }
+
+    public void update(String name, String newType, int newScope) {
+        if (table.containsKey(name)) {
+            Symbol symbol = new Symbol(name, newType, newScope);
+            table.put(name, symbol);
+            System.out.println("Updated: " + name);
+        } else {
+            System.out.println("Symbol not found!");
+        }
+    }
+
+    public void display() {
+        if (table.isEmpty()) {
+            System.out.println("Symbol Table is empty.");
+        } else {
+            System.out.println("\nSymbol Table:");
+            for (Symbol symbol : table.values()) {
+                System.out.println(symbol);
+            }
+        }
+    }
+}
+
+public class SymbolTableDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        SymbolTableADT symbolTable = new SymbolTableADT();
+
+        int choice;
+        do {
+            System.out.println("\nSymbol Table Operations:");
+            System.out.println("1. Insert");
+            System.out.println("2. Delete");
+            System.out.println("3. Search");
+            System.out.println("4. Update");
+            System.out.println("5. Display");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter symbol name: ");
+                    String name = sc.nextLine();
+                    System.out.print("Enter type: ");
+                    String type = sc.nextLine();
+                    System.out.print("Enter scope level: ");
+                    int scope = sc.nextInt();
+                    symbolTable.insert(name, type, scope);
+                    break;
+                case 2:
+                    System.out.print("Enter symbol name to delete: ");
+                    name = sc.nextLine();
+                    symbolTable.delete(name);
+                    break;
+                case 3:
+                    System.out.print("Enter symbol name to search: ");
+                    name = sc.nextLine();
+                    symbolTable.search(name);
+                    break;
+                case 4:
+                    System.out.print("Enter symbol name to update: ");
+                    name = sc.nextLine();
+                    System.out.print("Enter new type: ");
+                    type = sc.nextLine();
+                    System.out.print("Enter new scope: ");
+                    scope = sc.nextInt();
+                    symbolTable.update(name, type, scope);
+                    break;
+                case 5:
+                    symbolTable.display();
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 6);
+
+        sc.close();
+    }
+}
