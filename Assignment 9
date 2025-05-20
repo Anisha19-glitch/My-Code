@@ -1,3 +1,4 @@
+#A newspaper delivery boy every day drops news paper in a society with many lanes and houses. Design a program to provide different paths that he could follow. Solve the problem by suggesting appropriate data structures. Design necessary class
 import java.util.*;
 
 class DeliveryGraph {
