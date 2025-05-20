@@ -1,0 +1,58 @@
+import java.util.*;
+
+class DeliveryGraph {
+    private int houses;
+    private List<List<Integer>> adj;
+
+    public DeliveryGraph(int houses) {
+        this.houses = houses;
+        adj = new ArrayList<>();
+        for (int i = 0; i < houses; i++) {
+            adj.add(new ArrayList<>());
+        }
+    }
+
+    public void addPath(int u, int v) {
+        adj.get(u).add(v);
+        adj.get(v).add(u);  // undirected paths
+    }
+
+    public void printAllPaths(int start) {
+        boolean[] visited = new boolean[houses];
+        List<Integer> path = new ArrayList<>();
+        dfs(start, visited, path);
+    }
+
+    private void dfs(int current, boolean[] visited, List<Integer> path) {
+        visited[current] = true;
+        path.add(current);
+
+        if (path.size() == houses) {
+            System.out.println("Path: " + path);
+        } else {
+            for (int neighbor : adj.get(current)) {
+                if (!visited[neighbor]) {
+                    dfs(neighbor, visited, path);
+                }
+            }
+        }
+
+        visited[current] = false;
+        path.remove(path.size() - 1);
+    }
+}
+
+public class NewspaperDelivery {
+    public static void main(String[] args) {
+        DeliveryGraph graph = new DeliveryGraph(4);
+
+        graph.addPath(0, 1);
+        graph.addPath(0, 2);
+        graph.addPath(1, 2);
+        graph.addPath(1, 3);
+        graph.addPath(2, 3);
+
+        System.out.println("All delivery paths starting from house 0:");
+        graph.printAllPaths(0);
+    }
+}
