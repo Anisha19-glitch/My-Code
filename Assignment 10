@@ -1,0 +1,90 @@
+#Write a program to create a telephone book database of N clients. Make use of a hash table implementation to quickly look up a client's telephone number. do same for this
+import java.util.*;
+
+class PhoneBook {
+    private HashMap<String, String> phonebook;
+
+    public PhoneBook() {
+        phonebook = new HashMap<>();
+    }
+
+    public void addClient(String name, String number) {
+        phonebook.put(name, number);
+        System.out.println("Client added: " + name);
+    }
+
+    public void searchClient(String name) {
+        if (phonebook.containsKey(name)) {
+            System.out.println(name + "'s number: " + phonebook.get(name));
+        } else {
+            System.out.println("Client not found.");
+        }
+    }
+
+    public void deleteClient(String name) {
+        if (phonebook.remove(name) != null) {
+            System.out.println("Client deleted: " + name);
+        } else {
+            System.out.println("Client not found.");
+        }
+    }
+
+    public void display() {
+        System.out.println("Phonebook Entries:");
+        for (Map.Entry<String, String> entry : phonebook.entrySet()) {
+            System.out.println(entry.getKey() + " → " + entry.getValue());
+        }
+    }
+}
+
+public class TelephoneBookApp {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        PhoneBook book = new PhoneBook();
+
+        int choice;
+        String name, number;
+
+        do {
+            System.out.println("\nPhone Book Menu:");
+            System.out.println("1. Add Client");
+            System.out.println("2. Search Client");
+            System.out.println("3. Delete Client");
+            System.out.println("4. Display All");
+            System.out.println("5. Exit");
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter name: ");
+                    name = sc.nextLine();
+                    System.out.print("Enter number: ");
+                    number = sc.nextLine();
+                    book.addClient(name, number);
+                    break;
+                case 2:
+                    System.out.print("Enter name to search: ");
+                    name = sc.nextLine();
+                    book.searchClient(name);
+                    break;
+                case 3:
+                    System.out.print("Enter name to delete: ");
+                    name = sc.nextLine();
+                    book.deleteClient(name);
+                    break;
+                case 4:
+                    book.display();
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+
+        } while (choice != 5);
+        sc.close();
+    }
+}
